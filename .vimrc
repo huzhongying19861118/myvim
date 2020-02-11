@@ -316,7 +316,6 @@ Plug 'kien/rainbow_parentheses.vim'
 " File navigation
 Plug 'scrooloose/nerdtree'
 Plug 'jistr/vim-nerdtree-tabs'
-Plug 'ctrlpvim/ctrlp.vim', { 'on': 'CtrlP' }
 " Make sure you use single quotes
 
 Plug 'tpope/vim-fugitive'
@@ -325,10 +324,6 @@ Plug 'gisphm/vim-gitignore', { 'for': ['gitignore', 'vim-plug'] }
 Plug 'easymotion/vim-easymotion'
 Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
 Plug 'octol/vim-cpp-enhanced-highlight'
-Plug 'ludovicchabant/vim-gutentags'
-Plug 'skywind3000/gutentags_plus'
-Plug 'skywind3000/vim-preview'
-Plug 'tpope/vim-unimpaired'
 Plug 'honza/vim-snippets'
 Plug 'SirVer/ultisnips'
 Plug 'preservim/nerdcommenter'
@@ -470,35 +465,35 @@ let g:cpp_concepts_highlight = 1
 " ===gutentags
 " ===
 " gutentags 搜索工程目录的标志，碰到这些文件/目录名就停止向上一级目录递归
-let g:gutentags_define_advanced_commands = 1
+"let g:gutentags_define_advanced_commands = 1
 "let $GTAGSLABEL = 'native'
 "let $GTAGSCONF = '/home/andy/.globalrc'
-let g:gutentags_project_root = ['.root', '.svn', '.git', '.hg', '.project']
+"let g:gutentags_project_root = ['.root', '.svn', '.git', '.hg', '.project']
 " 所生成的数据文件的名称
-let g:gutentags_ctags_tagfile = '.tags'
+"let g:gutentags_ctags_tagfile = '.tags'
 " 同时开启 ctags 和 gtags 支持：
-let g:gutentags_modules = []
-if executable('ctags')
-	let g:gutentags_modules += ['ctags']
-endif
+"let g:gutentags_modules = []
+"if executable('ctags')
+"	let g:gutentags_modules += ['ctags']
+"endif
 "if executable('gtags-cscope') && executable('gtags')
 "	let g:gutentags_modules += ['gtags_cscope']
 "endif
 " 将自动生成的 tags 文件全部放入 ~/.cache/tags 目录中，避免污染工程目录
-let s:vim_tags = expand('~/.cache/tags')
-let g:gutentags_cache_dir = s:vim_tags
+"let s:vim_tags = expand('~/.cache/tags')
+"let g:gutentags_cache_dir = s:vim_tags
 " 配置 ctags 的参数
-let g:gutentags_ctags_extra_args = ['--fields=+niazS', '--extras=+q']
-let g:gutentags_ctags_extra_args += ['--c++-kinds=+px']
-let g:gutentags_ctags_extra_args += ['--c-kinds=+px']
+"let g:gutentags_ctags_extra_args = ['--fields=+niazS', '--extras=+q']
+"let g:gutentags_ctags_extra_args += ['--c++-kinds=+px']
+"let g:gutentags_ctags_extra_args += ['--c-kinds=+px']
 " 如果使用 universal ctags 需要增加下面一行，老的 Exuberant-ctags 不能加下一行
-let g:gutentags_ctags_extra_args += ['--output-format=e-ctags']
+"let g:gutentags_ctags_extra_args += ['--output-format=e-ctags']
 " 禁用 gutentags 自动加载 gtags 数据库的行为
-let g:gutentags_auto_add_gtags_cscope = 0
+"let g:gutentags_auto_add_gtags_cscope = 0
 " 检测 ~/.cache/tags 不存在就新建
-if !isdirectory(s:vim_tags)
-   silent! call mkdir(s:vim_tags, 'p')
-endif
+"if !isdirectory(s:vim_tags)
+"   silent! call mkdir(s:vim_tags, 'p')
+"endif
 "let g:gutentags_plus_switch = 1 
 "let g:gutentags_plus_nomap = 0
  "noremap <silent> <leader>gs :GscopeFind s <C-R><C-W><cr>
@@ -517,16 +512,16 @@ endif
 " ===
 " === quick preview
 " ===
-autocmd FileType qf nnoremap <silent><buffer> p :PreviewQuickfix<cr>
-autocmd FileType qf nnoremap <silent><buffer> P :PreviewClose<cr>
-"noremap <m-u> :PreviewScroll -1<cr>
+"autocmd FileType qf nnoremap <silent><buffer> p :PreviewQuickfix<cr>
+"autocmd FileType qf nnoremap <silent><buffer> P :PreviewClose<cr>
+""noremap <m-u> :PreviewScroll -1<cr>
 "noremap <m-d> :PreviewScroll +1<cr>
 "inoremap <m-u> <c-\><c-o>:PreviewScroll -1<cr>
 "inoremap <m-d> <c-\><c-o>:PreviewScroll +1<cr>
-noremap <C-u> :PreviewScroll -1<cr>
-noremap <C-d> :PreviewScroll +1<cr>
-inoremap <m-u> <c-\><c-o>:PreviewScroll -1<cr>
-inoremap <m-d> <c-\><c-o>:PreviewScroll +1<cr>
+"noremap <C-u> :PreviewScroll -1<cr>
+"noremap <C-d> :PreviewScroll +1<cr>
+"inoremap <m-u> <c-\><c-o>:PreviewScroll -1<cr>
+"inoremap <m-d> <c-\><c-o>:PreviewScroll +1<cr>
 
 " ===
 " === leaderf and gtags
