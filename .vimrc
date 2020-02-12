@@ -327,6 +327,7 @@ Plug 'octol/vim-cpp-enhanced-highlight'
 Plug 'honza/vim-snippets'
 Plug 'SirVer/ultisnips'
 Plug 'preservim/nerdcommenter'
+Plug 'tpope/vim-unimpaired'
 " Shorthand notation; fetches https://github.com/junegunn/vim-easy-align
 "Plug 'junegunn/vim-easy-align'
 
