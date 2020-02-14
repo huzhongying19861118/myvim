@@ -115,8 +115,8 @@ let mapleader=" "
 " Column (:) mods
 map ; :
 map q; q:
-map <LEADER>/ :!
-map <LEADER>r :r !
+"map <LEADER>/ :!
+"map <LEADER>r :r !
 map <LEADER>sr :%s/
 
 " Save & quit
@@ -163,8 +163,21 @@ noremap <> <ESC>
 "====
 "noremap <LEADER>y "+y
 "noremap <LEADER>p "+p
+nnoremap x "_x
+nnoremap X "_X
+nnoremap d "_d
+nnoremap dd "_dd
+nnoremap D "_D
+vnoremap d "_d
+vnoremap dd "_dd
 
-
+nnoremap <leader>x ""x
+nnoremap <leader>X ""X
+nnoremap <leader>d ""d
+nnoremap <leader>dd ""dd
+nnoremap <leader>D ""D
+vnoremap <leader>d ""d
+vnoremap <leader>dd ""dd
 " ===
 " ===buffer management
 " ===
@@ -328,6 +341,10 @@ Plug 'honza/vim-snippets'
 Plug 'SirVer/ultisnips'
 Plug 'preservim/nerdcommenter'
 Plug 'tpope/vim-unimpaired'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'jaxbot/semantic-highlight.vim'
+"Plug 'inkarkat/vim-mark'
+Plug 'vim-scripts/DoxygenToolkit.vim'
 " Shorthand notation; fetches https://github.com/junegunn/vim-easy-align
 "Plug 'junegunn/vim-easy-align'
 
@@ -609,3 +626,103 @@ let g:NERDCommentEmptyLines = 1
 let g:NERDTrimTrailingWhitespace = 1
 " Enable NERDCommenterToggle to check all selected lines is commented or not 
 let g:NERDToggleCheckAllLines = 1
+
+" ===
+" === coc
+" ===
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~ '\s'
+endfunction
+inoremap <silent><expr> <TAB>
+	  \ pumvisible() ? "\<C-n>" :
+	  \ <SID>check_back_space() ? "\<TAB>" :
+	  \ coc#refresh()
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<CR>"
+
+
+" ===
+" ===highlight
+" ===
+nnoremap <Leader>sh :SemanticHighlightToggle<cr>
+let g:semanticBlacklistOverride = {
+	\ 'c': [
+	\	'setTimeout',
+	\	'break',
+	\	'dance',
+	\ ]
+\ }
+let s:semanticGUIColors = [ '#72d572', '#c5e1a5', '#e6ee9c', '#fff59d', '#ffe082', '#ffcc80', '#ffab91', '#bcaaa4', '#b0bec5', '#ffa726', '#ff8a65', '#f9bdbb', '#f9bdbb', '#f8bbd0', '#e1bee7', '#d1c4e9', '#ffe0b2', '#c5cae9', '#d0d9ff', '#b3e5fc', '#b2ebf2', '#b2dfdb', '#a3e9a4', '#dcedc8' , '#f0f4c3', '#ffb74d' ]
+
+" ===
+" ===  c 和　ｈ文件的头注释自动生成
+" ===
+" 当新建 .h .c .hpp .cpp .mk .sh等文件时自动调用SetTitle 函数
+autocmd BufNewFile *.[ch],*.hpp,*.cpp,Makefile,*.mk,*.sh exec ":call SetTitle()" 
+" 加入注释 
+func SetComment()
+	call setline(1,"/*================================================================") 
+	call append(line("."),   "*   Copyright (C) ".strftime("%Y")." Zte Ltd. All rights reserved.")
+	call append(line(".")+1, "*   ") 
+	call append(line(".")+2, "*   文件名称：".expand("%:t")) 
+	call append(line(".")+3, "*   创 建 者：HuZhongying")
+	call append(line(".")+4, "*   创建日期：".strftime("%Y年%m月%d日")) 
+	call append(line(".")+5, "*   描    述：") 
+	call append(line(".")+6, "*")
+	call append(line(".")+7, "================================================================*/") 
+	call append(line(".")+8, "")
+	call append(line(".")+9, "")
+endfunc
+" 加入shell,Makefile注释
+func SetComment_sh()
+	call setline(3, "#================================================================") 
+	call setline(4, "#   Copyright (C) ".strftime("%Y")." Zte Ltd. All rights reserved.")
+	call setline(5, "#   ") 
+	call setline(6, "#   文件名称：".expand("%:t")) 
+	call setline(7, "#   创 建 者：HuZhongying")
+	call setline(8, "#   创建日期：".strftime("%Y年%m月%d日")) 
+	call setline(9, "#   描    述：") 
+	call setline(10, "#")
+	call setline(11, "#================================================================")
+	call setline(12, "")
+	call setline(13, "")
+endfunc 
+" 定义函数SetTitle，自动插入文件头 
+func SetTitle()
+	if &filetype == 'make' 
+		call setline(1,"") 
+		call setline(2,"")
+		call SetComment_sh()
+ 
+	elseif &filetype == 'sh' 
+		call setline(1,"#!/bin/sh") 
+		call setline(2,"")
+		call SetComment_sh()
+		
+	else
+		call SetComment()
+		if expand("%:e") == 'hpp' 
+			call append(line(".")+10, "#ifndef _".toupper(expand("%:t:r"))."_H") 
+			call append(line(".")+11, "#define _".toupper(expand("%:t:r"))."_H") 
+			call append(line(".")+12, "#ifdef __cplusplus") 
+			call append(line(".")+13, "extern \"C\"") 
+			call append(line(".")+14, "{") 
+			call append(line(".")+15, "#endif") 
+			call append(line(".")+16, "") 
+			call append(line(".")+17, "#ifdef __cplusplus") 
+			call append(line(".")+18, "}") 
+			call append(line(".")+19, "#endif") 
+			call append(line(".")+20, "#endif //".toupper(expand("%:t:r"))."_H") 
+ 
+		elseif expand("%:e") == 'h' 
+			call append(line(".")+10, "#ifndef _".toupper(expand("%:t:r"))."_H") 
+			call append(line(".")+11, "#define _".toupper(expand("%:t:r"))."_H") 
+			call append(line(".")+12, "#endif") 
+		elseif &filetype == 'c' 
+			call append(line(".")+10,"#include \"".expand("%:t:r").".h\"") 
+		elseif &filetype == 'cpp' 
+			call append(line(".")+10, "#include \"".expand("%:t:r").".h\"") 
+		endif
+	endif
+endfunc
+source ~/.vim/plugged/mark.vim
